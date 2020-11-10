@@ -13,11 +13,11 @@ import (
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 )
 
-// AllSecrets is the map of the AWS Secrets returned from getAllSecrets
+// AllSecrets is the map of the AWS Secrets
 var AllSecrets map[string]interface{}
 
 // GetAllSecrets should be called at the start of your main() to populate the global AllSecrets
-func GetAllSecrets(secretsName string) (allSecrets map[string]interface{}) {
+func GetAllSecrets(secretsName string) {
 	region := "eu-west-2"
 
 	//Create a Secrets Manager client
@@ -73,13 +73,13 @@ func GetAllSecrets(secretsName string) (allSecrets map[string]interface{}) {
 	// AWS Secrets Mgr gives us all the secrets in a json structured string of text.
 	// We need to unmarshall it into a map so we can extract the required values.
 
-	json.Unmarshal([]byte(secretString), &allSecrets)
-	return allSecrets
+	json.Unmarshal([]byte(secretString), &AllSecrets)
+	return
 }
 
 // GetSecret returns individual secrets out of AllSecrets as strings
 func GetSecret(varName string) (varValue string) {
 	varValue = fmt.Sprint(AllSecrets[varName])
-	//log.Println(varName+": ", varValue)
+	//fmt.Println(varName+": ", varValue)
 	return varValue
 }
